@@ -36,4 +36,7 @@ void clear_led1(void);
 void set_led2(void);
 void clear_led2(void);
 
+void set_tx_flow(void);
+void set_rx_flow(void);
+
 #endif

@@ -34,3 +34,16 @@ void clear_led2() {
 
     LED2_PORT |= _BV(LED2_PIN);
 }
+
+
+void set_tx_flow() {
+
+    FLOW_PORT |= _BV(TX_PIN);
+    FLOW_PORT |= _BV(RX_PIN);
+}
+
+void set_rx_flow() {
+
+    FLOW_PORT &= ~_BV(TX_PIN);
+    FLOW_PORT &= ~_BV(RX_PIN);
+}
