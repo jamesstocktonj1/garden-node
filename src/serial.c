@@ -51,7 +51,7 @@ ISR(UART_TX_vect) {
     //send end character
     else {
 
-        UDR0 = '\n';
+        //UDR0 = '\n';
 
         //disable tx interrupt
         UCSR0B &= ~(_BV(TXCIE0));
