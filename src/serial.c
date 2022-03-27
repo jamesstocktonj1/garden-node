@@ -107,7 +107,7 @@ void serial_tx(uint8_t bufferSize) {
     while(!(UCSR0A & _BV(UDRE0)));
 
     
-    if(bufferSize < MSG_BUF_LEN) {
+    if(bufferSize <= MSG_BUF_LEN) {
         
         //set flow control
         set_tx_flow();
