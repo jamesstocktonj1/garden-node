@@ -1,7 +1,7 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-#define MSG_BUF_LEN 10
+#define MSG_BUF_LEN 12
 #define RX_START_CHAR 'S'
 #define REPLY_START_CHAR 'R'
 #define END_CHAR 'E'
