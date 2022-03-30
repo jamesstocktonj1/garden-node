@@ -2,7 +2,7 @@
 #include "../include/io.h"
 
 
-ISR(UART_RX_vect) {
+ISR(USART_RX_vect) {
 
     //check for buffer overflow (invalid message)
     if(rxBufferIndex >= (MSG_BUF_LEN - 1)) {
@@ -39,11 +39,10 @@ ISR(UART_RX_vect) {
 }
 
 
-ISR(UART_TX_vect) {
+ISR(USART_TX_vect) {
 
-    set_led2();
     //if data still to send
-    if(txBufferIndex < txBufferLength) {
+    if(txBufferIndex <= txBufferLength) {
 
         UDR0 = txBuffer[txBufferIndex];
         txBufferIndex++;
@@ -59,7 +58,6 @@ ISR(UART_TX_vect) {
 
         transmitFlag = 0;
     }
-    clear_led2();
 }
 
 
@@ -106,22 +104,20 @@ void serial_reset(void) {
 void serial_tx(uint8_t bufferSize) {
 
     //wait for write complete
-    //while(!(UCSR0A & _BV(UDRE0)));
+    while(!(UCSR0A & _BV(UDRE0)));
 
     
-    if(bufferSize < MSG_BUF_LEN) {
+    if(bufferSize <= MSG_BUF_LEN) {
         
         //set flow control
         set_tx_flow();
 
         txBufferLength = bufferSize;
         transmitFlag = 1;
-        txBufferIndex = 2;
+        txBufferIndex = 1;
 
         //send first value
         UDR0 = txBuffer[0];
-
-        //set_led1();
 
         //enable tx interrupt
         UCSR0B |= _BV(TXCIE0);
