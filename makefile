@@ -8,6 +8,7 @@
 #	size 	- shows size of elf file
 #	flash	- upload hex to target
 #	fuse	- set fuses of target
+#	test	- test programmer connection
 #	clean	- deletes compiled files
 
 # avr constants
@@ -54,6 +55,9 @@ flash: all
 
 fuse:
 	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) -U lfuse:w:$(LF):m -U hfuse:w:$(HF):m -U efuse:w:$(EF):m
+
+test:
+	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU)
 
 clean:
 	rm -f $(BUILD)/$(TARGET).elf
