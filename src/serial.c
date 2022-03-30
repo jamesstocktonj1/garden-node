@@ -41,13 +41,14 @@ ISR(UART_RX_vect) {
 
 ISR(UART_TX_vect) {
 
+    set_led2();
     //if data still to send
     if(txBufferIndex < txBufferLength) {
 
         UDR0 = txBuffer[txBufferIndex];
         txBufferIndex++;
     }
-
+    
     //send end character
     else {
 
@@ -58,6 +59,7 @@ ISR(UART_TX_vect) {
 
         transmitFlag = 0;
     }
+    clear_led2();
 }
 
 
@@ -74,7 +76,7 @@ void serial_init(void) {
     UCSR0B |= _BV(RXCIE0);
 
     //enable tx interrupt
-    UCSR0B |= _BV(TXCIE0);
+    //UCSR0B |= _BV(TXCIE0);
 
     //set to data length to 8 bits
     UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
@@ -97,27 +99,29 @@ void serial_reset(void) {
     rxBufferReceived = 0;
 
     //set flow control
-    set_rx_flow();
+    //set_rx_flow();
 }
 
 
 void serial_tx(uint8_t bufferSize) {
 
     //wait for write complete
-    while(!(UCSR0A & _BV(UDRE0)));
+    //while(!(UCSR0A & _BV(UDRE0)));
 
     
-    if(bufferSize <= MSG_BUF_LEN) {
+    if(bufferSize < MSG_BUF_LEN) {
         
         //set flow control
         set_tx_flow();
 
         txBufferLength = bufferSize;
         transmitFlag = 1;
-        txBufferIndex = 1;
+        txBufferIndex = 2;
 
         //send first value
         UDR0 = txBuffer[0];
+
+        //set_led1();
 
         //enable tx interrupt
         UCSR0B |= _BV(TXCIE0);

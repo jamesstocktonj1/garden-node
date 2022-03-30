@@ -11,7 +11,7 @@
 //tx variables
 volatile uint8_t txBuffer[MSG_BUF_LEN];
 volatile uint8_t txBufferIndex;
-uint8_t txBufferLength;
+volatile uint8_t txBufferLength;
 volatile uint8_t transmitFlag;
 
 //rx variables
