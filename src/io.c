@@ -12,8 +12,8 @@ void init_pins() {
 
     RELAY_DDR |= _BV(RELAY_PIN);
 
-    FLOW_PIN |= _BV(TX_PIN);
-    FLOW_PIN |= _BV(RX_PIN);
+    FLOW_DDR |= _BV(TX_PIN);
+    FLOW_DDR |= _BV(RX_PIN);
 }
 
 
@@ -35,7 +35,7 @@ void set_led2() {
 
 void clear_led2() {
 
-    LED2_PORT |= _BV(LED2_PIN);
+    LED2_PORT &= ~_BV(LED2_PIN);
 }
 
 void set_relay() {
