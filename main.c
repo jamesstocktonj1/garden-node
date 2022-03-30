@@ -19,13 +19,13 @@ int main() {
     sei();
     
     set_buffer();
-    serial_tx(8);
+    
 
     while(1) {
         
-        //clear_led1();
+        serial_tx(10);
 
-        //set_led1();
+        set_led1();
         _delay_ms(800);
 
         clear_led1();
@@ -47,5 +47,6 @@ void set_buffer() {
     txBuffer[6] = 'o';
     txBuffer[7] = 'd';
     txBuffer[8] = 'e';
-    //txBuffer[9] = '!';
+    txBuffer[9] = '!';
+    txBuffer[10] = '\n';
 }
