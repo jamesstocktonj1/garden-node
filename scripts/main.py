@@ -31,7 +31,6 @@ def handleSerial(serialDevice):
             buf = []
             
             if(cmd[0] == "light"):
-                buf.append(1)
                 buf.append(int(cmd[1]))
 
                 if(cmd[2] == "on"):
