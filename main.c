@@ -25,8 +25,6 @@ int main() {
     sei();
     
     
-    
-
     while(1) {
 
         if(rxBufferReceived) {
@@ -41,6 +39,7 @@ int main() {
 
 void set_buffer() {
 
+    //set buffer to "HelloNode!"
     txBuffer[0] = 'H';
     txBuffer[1] = 'e';
     txBuffer[2] = 'l';
@@ -61,19 +60,14 @@ void parse_data() {
     char localBuffer[MSG_BUF_LEN];
 
     //create local copy (frees up for incomming messages)
-    //memcpy(localBuffer, rxBuffer, MSG_BUF_LEN);
-
-    int i;
-    for(i=0; i<MSG_BUF_LEN; i++) {
-        localBuffer[i] = rxBuffer[i];
-    }
+    memcpy(localBuffer, rxBuffer, MSG_BUF_LEN);
 
     //reset buffer flag
     rxBufferReceived = 0;
 
     //handle data sent to node
     if(localBuffer[PROT_POS_NODEID] == MY_NODE) {
-        //set_led1();
+        
         switch(localBuffer[PROT_POS_ITEM]) {
 
             case PROT_ITEM_LED1:
@@ -111,8 +105,9 @@ void parse_data() {
         txBuffer[0] = REPLY_START_CHAR;
         txBuffer[1] = 'A';
         txBuffer[2] = END_CHAR;
+        txBuffer[3] = '\n';
 
-        //serial_tx(3);
+        serial_tx(4);
     }
 
     //handle global broadcast
@@ -120,5 +115,4 @@ void parse_data() {
         //handle broadcast data
     }
 
-    //clear_led1();
 }
