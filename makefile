@@ -40,6 +40,11 @@ LF = 0xe2
 HF = 0xdf
 EF = 0xf9
 
+#external python scripts
+PYTHON = python
+COMMS = scripts/main.py
+SERIAL = COM8
+
 
 
 all: $(BUILD)/$(TARGET).hex
@@ -50,6 +55,7 @@ disasm: $(BUILD)/$(TARGET).elf
 size: $(BUILD)/$(TARGET).elf
 	$(OBJSIZE) -C $(BUILD)/$(TARGET).elf
 
+
 flash: all
 	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU) -U flash:w:$(BUILD)/$(TARGET).hex
 
@@ -58,6 +64,11 @@ fuse:
 
 test:
 	$(AVRDUDE) -c $(PROGRAMMER) -p $(MCU)
+
+
+comms:
+	$(PYTHON) $(COMMS) $(SERIAL)
+
 
 clean:
 	rm -f $(BUILD)/$(TARGET).elf
