@@ -9,6 +9,7 @@
 #	flash	- upload hex to target
 #	fuse	- set fuses of target
 #	test	- test programmer connection
+#	comms	- python comms script
 #	clean	- deletes compiled files
 
 # avr constants
