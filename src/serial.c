@@ -42,7 +42,7 @@ ISR(USART_RX_vect) {
 ISR(USART_TX_vect) {
 
     //if data still to send
-    if(txBufferIndex <= txBufferLength) {
+    if(txBufferIndex < txBufferLength) {
 
         UDR0 = txBuffer[txBufferIndex];
         txBufferIndex++;
