@@ -3,10 +3,18 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/delay.h>
 
 #include "protocol.h"
 
 #define SERIAL_BAUD 9600
+
+//timings
+#define TX_START_DELAY 1
+#define END_DELAY 0
+
+#define REPLY_DELAY 1
+
 
 //tx variables
 volatile uint8_t txBuffer[MSG_BUF_LEN];

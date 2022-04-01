@@ -56,6 +56,12 @@ ISR(USART_TX_vect) {
         //disable tx interrupt
         UCSR0B &= ~(_BV(TXCIE0));
 
+#if END_DELAY
+        _delay_ms(TX_START_DELAY);
+#endif
+
+        set_rx_flow();
+
         transmitFlag = 0;
     }
 }
@@ -97,7 +103,7 @@ void serial_reset(void) {
     rxBufferReceived = 0;
 
     //set flow control
-    //set_rx_flow();
+    set_rx_flow();
 }
 
 
@@ -111,6 +117,8 @@ void serial_tx(uint8_t bufferSize) {
         
         //set flow control
         set_tx_flow();
+
+        _delay_ms(TX_START_DELAY);
 
         txBufferLength = bufferSize;
         transmitFlag = 1;
