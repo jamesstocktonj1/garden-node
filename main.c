@@ -108,6 +108,8 @@ void parse_data() {
                 break;
         }
 
+        _delay_ms(REPLY_DELAY);
+
         //simple response
         txBuffer[0] = REPLY_START_CHAR;
         txBuffer[1] = 'A';
