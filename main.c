@@ -22,6 +22,13 @@ int main() {
 
     serial_init();
     serial_reset();
+
+    set_rx_flow();
+
+    set_led1();
+    _delay_ms(1200);
+    clear_led1();
+
     sei();
     
     
