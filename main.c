@@ -15,6 +15,7 @@ void set_buffer(void);
 void parse_data(void);
 
 void acknowledge_data(void);
+void check_timeout(void);
 
 
 
@@ -26,7 +27,7 @@ int main() {
     serial_init();
     serial_reset();
 
-    ConfigT0_ISR();
+    init_timer();
 
     set_rx_flow();
 
@@ -44,12 +45,7 @@ int main() {
             parse_data();
         }
 
-        if (0 == msCommsTimeout){
-            //no comms - reset ports
-            clear_led1();
-            clear_led2();
-            clear_relay();
-        }
+        check_timeout();
     }
 
     return 0;
@@ -146,4 +142,16 @@ void acknowledge_data() {
     //set comms 
 
     serial_tx(5);
+}
+
+
+void check_timeout() {
+
+    if (0 == msCommsTimeout){
+
+        //no comms - reset ports
+        clear_led1();
+        clear_led2();
+        clear_relay();
+    }
 }
