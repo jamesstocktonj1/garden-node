@@ -27,8 +27,6 @@ ISR(USART_RX_vect) {
         
         rxBufferReceived = 1;
         rxBufferIndex = 0;
-
-        set_rx_flow();
     }
 
     //increment buffer index

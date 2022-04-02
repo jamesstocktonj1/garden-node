@@ -6,6 +6,7 @@
 #include <util/delay.h>
 
 #include "protocol.h"
+#include "timer.h"
 
 #define SERIAL_BAUD 9600
 
@@ -14,6 +15,8 @@
 #define END_DELAY 0
 
 #define REPLY_DELAY 1
+
+#define COMMS_TIMEOUT_ms 5000
 
 
 //tx variables

@@ -7,6 +7,7 @@
 #include "include/temperature.h"
 #include "include/protocol.h"
 #include "include/serial.h"
+#include "include/timer.h"
 
 #define MY_NODE '1'
 
@@ -14,6 +15,7 @@ void set_buffer(void);
 void parse_data(void);
 
 void acknowledge_data(void);
+void check_timeout(void);
 
 
 
@@ -24,6 +26,8 @@ int main() {
 
     serial_init();
     serial_reset();
+
+    init_timer();
 
     set_rx_flow();
 
@@ -40,6 +44,8 @@ int main() {
 
             parse_data();
         }
+
+        check_timeout();
     }
 
     return 0;
@@ -76,6 +82,8 @@ void parse_data() {
 
     //handle data sent to node
     if(localBuffer[PROT_POS_NODEID] == MY_NODE) {
+        
+        msCommsTimeout = COMMS_TIMEOUT_ms;
         
         switch(localBuffer[PROT_POS_ITEM]) {
 
@@ -131,5 +139,19 @@ void acknowledge_data() {
     txBuffer[3] = END_CHAR;
     txBuffer[4] = '\n';
 
+    //set comms 
+
     serial_tx(5);
+}
+
+
+void check_timeout() {
+
+    if (0 == msCommsTimeout){
+
+        //no comms - reset ports
+        clear_led1();
+        clear_led2();
+        clear_relay();
+    }
 }
