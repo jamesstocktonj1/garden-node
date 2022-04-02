@@ -24,29 +24,25 @@ ISR(BADISR_vect)
     // user code here
 }
 
-//#define msTIMER_RELOAD_VALUE 131
-#define msTIMER_RELOAD_VALUE (256-( (F_CPU/64) / 1000) )
 
-volatile uint16_t msTimer = 0;
-volatile uint16_t msCommsTimeout = 0;
 
 //Setting us a ms interrupt
 ISR(TIMER0_OVF_vect) {
     /* this ISR is called when TIMER0 overflows */
     TCNT0 = msTIMER_RELOAD_VALUE;
 
-    if (msTimer)
-    {
+    if (msTimer) {
+
         msTimer --;
     }
     
-    if (msCommsTimeout)
-    {
+    if (msCommsTimeout) {
+        
         msCommsTimeout --;
     }
 }
 
-void ConfigT0_ISR(void) {
+void init_timer() {
     //8-bit Timer Counter
 
     /*
@@ -68,4 +64,8 @@ void ConfigT0_ISR(void) {
     
     /* Enable Timer Overflow Interrupts */
     TIMSK0 |= _BV(TOIE0);
+
+    //initialise variables
+    msTimer = 0;
+    msCommsTimeout = 0;    
 }
