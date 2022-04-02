@@ -4,6 +4,7 @@
 #define MSG_BUF_LEN 12
 #define RX_START_CHAR 'S'
 #define REPLY_START_CHAR 'R'
+#define REPLAY_ACK 'A'
 #define END_CHAR 'E'
 #define BDCAST_CHAR '0'
 
@@ -12,6 +13,7 @@
 
 #define PROT_POS_START 0
 #define PROT_POS_NODEID 1
+#define PROT_POS_ACK 2
 #define PROT_POS_ITEM 2
 #define PROT_POS_DATA1 3
 #define PROT_POS_DATA2 4

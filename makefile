@@ -46,7 +46,9 @@ EF = 0xf9
 
 #external python scripts
 PYTHON = python
-COMMS = scripts/main.py
+SCRIPTS = scripts
+COMMS = main.py
+BUSMONITOR = bus-monitor.py
 SERIAL = COM8
 
 
@@ -76,7 +78,10 @@ test:
 
 
 comms:
-	$(PYTHON) $(COMMS) $(SERIAL)
+	$(PYTHON) $(SCRIPTS)/$(COMMS) $(SERIAL)
+
+monitor:
+	$(PYTHON) $(SCRIPTS)/$(BUSMONITOR) $(SERIAL)
 
 
 clean:
