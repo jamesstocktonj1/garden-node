@@ -13,6 +13,8 @@
 void set_buffer(void);
 void parse_data(void);
 
+void acknowledge_data(void);
+
 
 
 int main() {
@@ -108,20 +110,26 @@ void parse_data() {
                 break;
         }
 
-        _delay_ms(REPLY_DELAY);
-
-        //simple response
-        txBuffer[0] = REPLY_START_CHAR;
-        txBuffer[1] = 'A';
-        txBuffer[2] = END_CHAR;
-        txBuffer[3] = '\n';
-
-        serial_tx(4);
+        acknowledge_data();
     }
 
     //handle global broadcast
     else if(localBuffer[PROT_POS_NODEID] == BDCAST_CHAR) {
         //handle broadcast data
     }
+}
 
+
+
+void acknowledge_data() {
+
+    _delay_ms(REPLY_DELAY);
+
+    txBuffer[PROT_POS_START] = REPLY_START_CHAR;
+    txBuffer[PROT_POS_NODEID] = MY_NODE;
+    txBuffer[PROT_POS_ACK] = REPLAY_ACK;
+    txBuffer[3] = END_CHAR;
+    txBuffer[4] = '\n';
+
+    serial_tx(5);
 }
