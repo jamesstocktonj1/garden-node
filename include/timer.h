@@ -1,5 +1,5 @@
-#ifndef __TIMER_H
-#define __TINER_H
+#ifndef TIMER_H
+#define TIMER_H
 
 #include <avr/io.h>
 
@@ -11,4 +11,4 @@ volatile extern uint16_t msCommsTimeout;
 
 void init_timer(void);
 
-#endif// __TIMER_H
+#endif// TIMER_H
