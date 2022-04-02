@@ -50,7 +50,7 @@ def decodeCommand(serialString):
     #decode data for reply
     elif(serialString[PROT_POS_START] == REPLY_START_CHAR):
         
-        if(serialString[1] == 'A'):
+        if(serialString[PROT_POS_ACK] == REPLAY_ACK):
             messageString += "Acknowledge"
         else:
             messageString += "Did not Acknowledge"
