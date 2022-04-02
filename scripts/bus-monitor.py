@@ -76,14 +76,14 @@ def handleSerial(serialDevice):
         buf = serialDevice.read(1).decode()
 
         if(buf in [RX_START_CHAR, REPLY_START_CHAR]):
-            print("Start Message")
+            #print("Start Message")
             buffer = ""
             buffer += buf
 
             midMessage = True
         
         elif(buf in [END_CHAR]):
-            print("End Message")
+            #print("End Message")
             decodeCommand(buffer + buf)
 
             midMessage = False
