@@ -8,6 +8,7 @@
 #include "include/protocol.h"
 #include "include/serial.h"
 #include "include/timer.h"
+#include "include/eeprom.h"
 
 void set_buffer(void);
 void parse_data(void);
@@ -20,9 +21,9 @@ MyInfo Me;
 int main() {
 
     //First, Set My Details - maybe used for Init
-    Me.My_Node_Num = '1';
-    Me.My_Zone = NODE_ZONE_GREENHOUSE;
-    Me.My_Node_Def = NODE_DEF_WATER;
+    Me.My_Node_Num = eeprom_get_node_id();
+    Me.My_Zone = eeprom_get_node_group();
+    Me.My_Node_Def = eeprom_get_node_type();
     
     // The above should then be populated from EEPROM Data
 
