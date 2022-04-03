@@ -68,6 +68,9 @@ void set_buffer() {
     txBuffer[8] = 'e';
     txBuffer[9] = '!';
     txBuffer[10] = '\n';
+
+    txBuffer = "HelloNode!\n\0";
+
 }
 
 
