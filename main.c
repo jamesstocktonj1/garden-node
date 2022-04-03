@@ -9,7 +9,9 @@
 #include "include/serial.h"
 #include "include/timer.h"
 
-#define MY_NODE '1'
+#define MY_NODE_NUM '1'
+#define MY_ZONE NODE_ZONE_GREENHOUSE
+#define MY_NODE_TYPE NODE_DEF_WATER
 
 void set_buffer(void);
 void parse_data(void);
@@ -81,7 +83,7 @@ void parse_data() {
     rxBufferReceived = 0;
 
     //handle data sent to node
-    if(localBuffer[PROT_POS_NODEID] == MY_NODE) {
+    if(localBuffer[PROT_POS_NODEID] == MY_NODE_NUM) {
         
         msCommsTimeout = COMMS_TIMEOUT_ms;
         
@@ -134,7 +136,7 @@ void acknowledge_data() {
     _delay_ms(REPLY_DELAY);
 
     txBuffer[PROT_POS_START] = REPLY_START_CHAR;
-    txBuffer[PROT_POS_NODEID] = MY_NODE;
+    txBuffer[PROT_POS_NODEID] = MY_NODE_NUM;
     txBuffer[PROT_POS_ACK] = REPLAY_ACK;
     txBuffer[3] = END_CHAR;
     txBuffer[4] = '\n';
@@ -147,11 +149,9 @@ void acknowledge_data() {
 
 void check_timeout() {
 
-    if (0 == msCommsTimeout){
+    if ( (MY_NODE_TYPE == NODE_DEF_WATER ) && (0 == msCommsTimeout) ){
 
-        //no comms - reset ports
-        clear_led1();
-        clear_led2();
+        //no comms - reset water ports only at this point
         clear_relay();
     }
 }

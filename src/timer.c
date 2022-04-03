@@ -1,6 +1,9 @@
 #include "../include/timer.h"
 
 
+volatile uint16_t msTimer = 0;
+volatile uint16_t msCommsTimeout = 0;
+
 
 //Catchall for setting up bad interrupt
 #if 0

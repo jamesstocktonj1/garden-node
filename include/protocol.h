@@ -29,5 +29,18 @@
 #define PROT_ITEM_READ_SOIL '5'
 #define PROT_ITEM_READ_STATUS '6'
 
+//Node Zone Definition
+#define NODE_ZONE_UNDEFINED 0
+#define NODE_ZONE_GREENHOUSE 1
+#define NODE_ZONE_VEG_PLOT_1 2
+#define NODE_ZONE_VEG_PLOT_2 3
+#define NODE_ZONE_PLANTER_1 4
+#define NODE_ZONE_PLANTER_2 5
+
+//Node Definitions
+#define NODE_DEF_UNDEFINED 0
+#define NODE_DEF_WATER 1
+#define NODE_DEF_LIGHTS 2
+
 
 #endif //__PROTOCOL_H
