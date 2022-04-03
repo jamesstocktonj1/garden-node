@@ -20,19 +20,20 @@ MyInfo Me;
 
 int main() {
 
-    //First, Set My Details - maybe used for Init
+    //read ID values from eeprom
     Me.My_Node_Num = eeprom_get_node_id();
     Me.My_Zone = eeprom_get_node_group();
     Me.My_Node_Def = eeprom_get_node_type();
-    
-    // The above should then be populated from EEPROM Data
 
+    //initialise periferals
     init_pins();
     init_temperature();
 
+    //initialise serial
     serial_init();
     serial_reset();
 
+    //initialise timers
     init_timer();
 
     set_rx_flow();
@@ -41,15 +42,18 @@ int main() {
     _delay_ms(1200);
     clear_led1();
 
+    //enable interrupts
     sei();    
     
     while(1) {
 
+        //check for new buffer data then parse data
         if(rxBufferReceived) {
 
             parse_data();
         }
 
+        //check for variable timeouts
         check_timeout();
     }
 
