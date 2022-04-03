@@ -9,19 +9,22 @@
 #include "include/serial.h"
 #include "include/timer.h"
 
-#define MY_NODE_NUM '1'
-#define MY_ZONE NODE_ZONE_GREENHOUSE
-#define MY_NODE_TYPE NODE_DEF_WATER
-
 void set_buffer(void);
 void parse_data(void);
 
 void acknowledge_data(void);
 void check_timeout(void);
 
-
+MyInfo Me;
 
 int main() {
+
+    //First, Set My Details - maybe used for Init
+    Me.My_Node_Num = '1';
+    Me.My_Zone = NODE_ZONE_GREENHOUSE;
+    Me.My_Node_Def = NODE_DEF_WATER;
+    
+    // The above should then be populated from EEPROM Data
 
     init_pins();
     init_temperature();
@@ -37,8 +40,7 @@ int main() {
     _delay_ms(1200);
     clear_led1();
 
-    sei();
-    
+    sei();    
     
     while(1) {
 
@@ -68,9 +70,6 @@ void set_buffer() {
     txBuffer[8] = 'e';
     txBuffer[9] = '!';
     txBuffer[10] = '\n';
-
-    txBuffer = "HelloNode!\n\0";
-
 }
 
 
@@ -86,9 +85,7 @@ void parse_data() {
     rxBufferReceived = 0;
 
     //handle data sent to node
-    if(localBuffer[PROT_POS_NODEID] == MY_NODE_NUM) {
-        
-        msCommsTimeout = COMMS_TIMEOUT_ms;
+    if ( (localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) || (localBuffer[PROT_POS_NODEID] == BDCAST_CHAR) ) {
         
         switch(localBuffer[PROT_POS_ITEM]) {
 
@@ -111,10 +108,12 @@ void parse_data() {
                 break;
 
             case PROT_ITEM_RELAY:
-                if(localBuffer[PROT_POS_DATA1] == '1') {
+                if ( (localBuffer[PROT_POS_DATA1] == '1') && (localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) ){
+                    //Relay can onlt be set at targetted Node, not a broadcast
                     set_relay();
                 }
                 else {
+                    //But can clear a relay from a broadcast
                     clear_relay();
                 }
                 break;
@@ -123,12 +122,12 @@ void parse_data() {
                 break;
         }
 
-        acknowledge_data();
-    }
-
-    //handle global broadcast
-    else if(localBuffer[PROT_POS_NODEID] == BDCAST_CHAR) {
-        //handle broadcast data
+        if(localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) {        
+            //If targetted at this node, then must acknowledge and reset comms timeout
+            
+            acknowledge_data();
+            msCommsTimeout = COMMS_TIMEOUT_ms;
+        }
     }
 }
 
@@ -139,7 +138,7 @@ void acknowledge_data() {
     _delay_ms(REPLY_DELAY);
 
     txBuffer[PROT_POS_START] = REPLY_START_CHAR;
-    txBuffer[PROT_POS_NODEID] = MY_NODE_NUM;
+    txBuffer[PROT_POS_NODEID] = Me.My_Node_Num;
     txBuffer[PROT_POS_ACK] = REPLAY_ACK;
     txBuffer[3] = END_CHAR;
     txBuffer[4] = '\n';
@@ -152,7 +151,7 @@ void acknowledge_data() {
 
 void check_timeout() {
 
-    if ( (MY_NODE_TYPE == NODE_DEF_WATER ) && (0 == msCommsTimeout) ){
+    if ( (Me.My_Node_Def == NODE_DEF_WATER ) && (0 == msCommsTimeout) ){
 
         //no comms - reset water ports only at this point
         clear_relay();
