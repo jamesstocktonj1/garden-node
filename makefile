@@ -41,7 +41,7 @@ PROGRAMMER = usbasp
 
 # fuses
 LF = 0xe2
-HF = 0xdf
+HF = 0xd7
 EF = 0xf9
 
 #external python scripts
