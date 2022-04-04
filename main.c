@@ -83,6 +83,9 @@ void parse_data() {
 
     char localBuffer[MSG_BUF_LEN];
 
+    uint16_t temp;
+    uint8_t tempUpper, tempLower;
+
     //create local copy (frees up for incomming messages)
     memcpy(localBuffer, rxBuffer, MSG_BUF_LEN);
 
@@ -123,6 +126,18 @@ void parse_data() {
                 }
                 break;
 
+            case PROT_ITEM_READ_TEMP:
+                temp = get_buffer_temperature();
+                tempLower = temp & 0x00ff;
+                tempUpper = temp >> 8;
+
+                //reply with temperature
+                txBuffer[0] = REPLY_START_CHAR;
+                txBuffer[1] = PROT_ITEM_READ_TEMP;
+                txBuffer[2] = tempLower;
+                txBuffer[3] = tempUpper;
+                txBuffer[4] = END_CHAR;
+
             default:
                 break;
         }
@@ -160,5 +175,11 @@ void check_timeout() {
 
         //no comms - reset water ports only at this point
         clear_relay();
+    }
+
+    if(msADCTimeout == 0) {
+        
+        buffer_temperature();
+        msADCTimeout = ADC_TIMEOUT_ms;
     }
 }
