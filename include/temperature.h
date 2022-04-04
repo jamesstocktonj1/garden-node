@@ -6,6 +6,7 @@
 
 #define TEMP_CONVERSION 0.1075
 #define BUFFER_SIZE 16
+#define ADC_TIMEOUT_ms 10000
 
 extern uint8_t buffer_pointer;
 extern uint16_t temperature_buffer[BUFFER_SIZE];
