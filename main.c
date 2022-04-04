@@ -92,9 +92,73 @@ void parse_data() {
     //reset buffer flag
     rxBufferReceived = 0;
 
-    //handle data sent to node
-    if ( (localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) || (localBuffer[PROT_POS_NODEID] == BDCAST_CHAR) ) {
-        
+
+    //handle local node data
+    if(localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) {
+
+        switch(localBuffer[PROT_POS_ITEM]) {
+
+            case PROT_ITEM_LED1:
+                if(localBuffer[PROT_POS_DATA1] == '1') {
+                    set_led1();
+                }
+                else {
+                    clear_led1();
+                }
+                acknowledge_data();
+                msCommsTimeout = COMMS_TIMEOUT_ms;
+                break;
+
+            case PROT_ITEM_LED2:
+                if(localBuffer[PROT_POS_DATA1] == '1') {
+                    set_led2();
+                }
+                else {
+                    clear_led2();
+                }
+                acknowledge_data();
+                msCommsTimeout = COMMS_TIMEOUT_ms;
+                break;
+
+            case PROT_ITEM_RELAY:
+                if ( (localBuffer[PROT_POS_DATA1] == '1') && (localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) ){
+                    //Relay can onlt be set at targetted Node, not a broadcast
+                    set_relay();
+                }
+                else {
+                    //But can clear a relay from a broadcast
+                    clear_relay();
+                }
+                acknowledge_data();
+                msCommsTimeout = COMMS_TIMEOUT_ms;
+                break;
+
+            case PROT_ITEM_READ_TEMP:
+                temp = get_buffer_temperature();
+                tempLower = temp & 0x00ff;
+                tempUpper = temp >> 8;
+
+                //reply with temperature
+                txBuffer[0] = REPLY_START_CHAR;
+                txBuffer[1] = Me.My_Node_Num;
+                txBuffer[2] = PROT_ITEM_READ_TEMP;
+                txBuffer[3] = tempLower;
+                txBuffer[4] = tempUpper;
+                txBuffer[5] = END_CHAR;
+
+                _delay_ms(REPLY_DELAY);
+
+                serial_tx(6);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    //handle broadcast data
+    else if(localBuffer[PROT_POS_NODEID] == BDCAST_CHAR) {
+
         switch(localBuffer[PROT_POS_ITEM]) {
 
             case PROT_ITEM_LED1:
@@ -115,38 +179,8 @@ void parse_data() {
                 }
                 break;
 
-            case PROT_ITEM_RELAY:
-                if ( (localBuffer[PROT_POS_DATA1] == '1') && (localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) ){
-                    //Relay can onlt be set at targetted Node, not a broadcast
-                    set_relay();
-                }
-                else {
-                    //But can clear a relay from a broadcast
-                    clear_relay();
-                }
-                break;
-
-            case PROT_ITEM_READ_TEMP:
-                temp = get_buffer_temperature();
-                tempLower = temp & 0x00ff;
-                tempUpper = temp >> 8;
-
-                //reply with temperature
-                txBuffer[0] = REPLY_START_CHAR;
-                txBuffer[1] = PROT_ITEM_READ_TEMP;
-                txBuffer[2] = tempLower;
-                txBuffer[3] = tempUpper;
-                txBuffer[4] = END_CHAR;
-
             default:
                 break;
-        }
-
-        if(localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) {        
-            //If targetted at this node, then must acknowledge and reset comms timeout
-            
-            acknowledge_data();
-            msCommsTimeout = COMMS_TIMEOUT_ms;
         }
     }
 }
