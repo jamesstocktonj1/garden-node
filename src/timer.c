@@ -3,6 +3,7 @@
 
 volatile uint16_t msTimer = 0;
 volatile uint16_t msCommsTimeout = 0;
+volatile uint16_t msADCTimeout = 0;
 
 
 //Catchall for setting up bad interrupt
@@ -41,6 +42,11 @@ ISR(TIMER0_OVF_vect) {
         
         msCommsTimeout --;
     }
+
+    if (msADCTimeout) {
+        
+        msADCTimeout --;
+    }
 }
 
 void init_timer() {
@@ -68,5 +74,6 @@ void init_timer() {
 
     //initialise variables
     msTimer = 0;
-    msCommsTimeout = 0;    
+    msCommsTimeout = 0;  
+    msADCTimeout = 0;  
 }
