@@ -9,6 +9,7 @@
 
 volatile extern uint16_t msTimer;
 volatile extern uint16_t msCommsTimeout;
+volatile extern uint16_t msADCTimeout;
 
 void init_timer(void);
 
