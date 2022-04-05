@@ -120,7 +120,20 @@ void parse_data() {
                 msCommsTimeout = COMMS_TIMEOUT_ms;
                 break;
 
-            case PROT_ITEM_RELAY:
+            case PROT_ITEM_RELAY1:
+                if ( (localBuffer[PROT_POS_DATA1] == '1') && (localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) ){
+                    //Relay can onlt be set at targetted Node, not a broadcast
+                    set_relay();
+                }
+                else {
+                    //But can clear a relay from a broadcast
+                    clear_relay();
+                }
+                acknowledge_data();
+                msCommsTimeout = COMMS_TIMEOUT_ms;
+                break;
+
+            case PROT_ITEM_RELAY2:
                 if ( (localBuffer[PROT_POS_DATA1] == '1') && (localBuffer[PROT_POS_NODEID] == Me.My_Node_Num) ){
                     //Relay can onlt be set at targetted Node, not a broadcast
                     set_relay();
