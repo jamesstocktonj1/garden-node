@@ -24,10 +24,11 @@
 //Item 0..9
 #define PROT_ITEM_LED1 '1'
 #define PROT_ITEM_LED2 '2'
-#define PROT_ITEM_RELAY '3'
-#define PROT_ITEM_READ_TEMP '4'
-#define PROT_ITEM_READ_SOIL '5'
-#define PROT_ITEM_READ_STATUS '6'
+#define PROT_ITEM_RELAY1 '3'
+#define PROT_ITEM_RELAY2 '4'
+#define PROT_ITEM_READ_TEMP '5'
+#define PROT_ITEM_READ_SOIL '6'
+#define PROT_ITEM_READ_STATUS '7'
 
 //Node Zone Definition
 #define NODE_ZONE_UNDEFINED '0'
