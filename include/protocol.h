@@ -1,10 +1,13 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#define PROTOCOL_VER '1'
+
 #define MSG_BUF_LEN 12
 #define RX_START_CHAR 'S'
 #define REPLY_START_CHAR 'R'
 #define REPLAY_ACK 'A'
+#define REPLAY_NACK 'N'
 #define END_CHAR 'E'
 #define BDCAST_CHAR '0'
 

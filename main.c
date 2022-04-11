@@ -14,6 +14,7 @@ void set_buffer(void);
 void parse_data(void);
 
 void acknowledge_data(void);
+void not_acknowledge_data(void);
 void check_timeout(void);
 
 MyInfo Me;
@@ -165,6 +166,7 @@ void parse_data() {
                 break;
 
             default:
+                not_acknowledge_data();
                 break;
         }
     }
@@ -215,6 +217,20 @@ void acknowledge_data() {
     serial_tx(5);
 }
 
+void not_acknowledge_data() {
+
+    _delay_ms(REPLY_DELAY);
+
+    txBuffer[PROT_POS_START] = REPLY_START_CHAR;
+    txBuffer[PROT_POS_NODEID] = Me.My_Node_Num;
+    txBuffer[PROT_POS_ACK] = REPLAY_NACK;
+    txBuffer[3] = END_CHAR;
+    txBuffer[4] = '\n';
+
+    //set comms 
+
+    serial_tx(5);
+}
 
 void check_timeout() {
 
